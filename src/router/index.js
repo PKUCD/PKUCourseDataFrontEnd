@@ -1,28 +1,36 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/components/Home'
-import Taglist from '@/components/Taglist'
-import Result from '@/components/Result'
-Vue.use(Router)
+import VueRouter from 'vue-router'
+import create from '../components/create.vue'
+import change from  '../components/change.vue'
+import browse from  '../components/browse.vue'
+Vue.use(VueRouter)
 
-export default new Router({
-	mode: "history",
-  routes: [
-    {
+const routes = [
+  {
     path:'/',
-    name: 'Home',
-    component: Home,
-    },
-    {
-      path: '/Taglist',
-      name: 'Taglist',
-      component: Taglist
-    },
-    {
-      path: '/Result',
-      name: 'Result',
-      component: Result
-    }
-  ]
+    redirect:'/change',
+    redirect:'/create',
+    redirect:'/browse'
+  },
+  {
+    path:'/browse',
+    name:'browse',
+    component:browse
+  },
+  {
+    path:'/create',
+    name:'create',
+    component:create
+  },
+  {
+    path:'/change',
+    name:'change',
+    component:change
+  }
+]
 
+const router = new VueRouter({
+  routes
 })
+
+export default router
