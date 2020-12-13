@@ -268,6 +268,7 @@ export default {
   mounted () {
     this.userid = this.getQueryString("uid");
 //    alert(this.userid);
+/*
     var res = {
       userName: 'username',
       studentID: '-11',
@@ -296,7 +297,7 @@ export default {
     this.datalist = res.datalist;
     this.favorlist = res.favorlist;
     this.isOwner = res.studentID !== "-1";
-    
+    */
     axios.get('/profile', {
       params: {
         uid: this.userid
