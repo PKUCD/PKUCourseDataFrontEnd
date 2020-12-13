@@ -10,12 +10,12 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/user',
+      path: '/profile',
       name: 'Profile',
       component: Profile
     },
     {
-      path: '/user/modify',
+      path: '/profile/edit',
       name: 'ProfileModify',
       component: ProfileModify
     }

@@ -1,15 +1,9 @@
 <template>
-  <div class="modifyprofile default">
+  <div class="modifyprofile default" id="ProfileModifyPage">
     <el-form ref="form" label-width="80px">
     <h3> 账号信息</h3>
     <el-form-item label="用户名">
       <el-input v-model="username"></el-input>
-    </el-form-item>
-    <el-form-item label="性别">
-      <el-radio-group v-model="gender">
-        <el-radio label="男"></el-radio>
-        <el-radio label="女"></el-radio>
-      </el-radio-group>
     </el-form-item>
     <el-form-item  label="头像">
       <el-upload
@@ -18,33 +12,15 @@
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <img v-if="avatarUrl" :src="avatarUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">确认修改</el-button>
+      <el-button type="primary" @click="modifyProfile">确认修改</el-button>
       <el-button>取消</el-button>
     </el-form-item>
     </el-form>
-    <!--
-    <el-form ref="form" label-width="120px">
-    <h3> 密码修改</h3>
-    <el-form-item label="请输入原密码">
-      <el-input></el-input>
-    </el-form-item>
-    <el-form-item label="请输入新密码">
-      <el-input></el-input>
-    </el-form-item>
-    <el-form-item label="确认新密码">
-      <el-input></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">确认修改</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
-    </el-form>
-    -->
   </div>
 </template>
 
@@ -54,16 +30,49 @@ export default {
   data () {
     return {
       username: '',
-      gender: true,
-      imageUrl: ''
+      avatarUrl: ''
     }
   },
+  mounted () {
+    axios.get('/profile/edit', {
+      params: {
+      }
+    })
+    .then(res => {
+      this.username = res.userName;
+      this.avatarUrl = res.avatarUrl;
+    }).catch(function (error) {
+      document.getElementById("ProfilePage").innerHTML = "404";
+    });
+  },
   methods: {
-    onSubmit () {
-      console.log('修改成功！')
+    modifyProfile () {
+      this.$message({
+        type: 'success',
+        message: '修改成功!'
+      });
+      this.$router.push({
+        path: '/profile'
+      });
+      axios.post('/profile/edit', {
+        newUserName: username,
+        newAvatarUrl: avatarUrl
+      }).then(function (res) {
+        // 修改成功
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        });
+        this.$router.push({
+          path: '/profile'
+        });
+      }).catch(function (error) {
+        document.getElementById("ProfileModifyPage").innerHTML = "404";
+      });
     },
     handleAvatarSuccess (res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+      this.avatarUrl = URL.createObjectURL(file.raw);
+//      alert(this.avatarUrl); 主要是想看看搞出来的路径是什么东西
     },
     beforeAvatarUpload (file) {
       const isJPG = file.type === 'image/jpeg'

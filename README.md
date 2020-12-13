@@ -2,6 +2,14 @@
 
 > A Vue.js project
 
+## Profile & ProfileModify
+
+主要的组件是`src/components`里的`Profile.vue`和`ProfileModify.vue`，对应的路由在`src/router`的`profile.js`。合并的时候应该只要下载这三个文件，前两个放`components`里，把`profile.js`的内容和本地的`router`合并一下。
+
+如果合并的时候出了问题，务必检查一下axios请求的属性名是否一致（我是按照api文档写的，但是不排除有错漏。）
+
+最后，希望您没有启用ESlint。
+
 ## Build Setup
 
 ``` bash
