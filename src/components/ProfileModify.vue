@@ -27,6 +27,7 @@
       <el-button>取消</el-button>
     </el-form-item>
     </el-form>
+    <!--
     <el-form ref="form" label-width="120px">
     <h3> 密码修改</h3>
     <el-form-item label="请输入原密码">
@@ -43,6 +44,7 @@
       <el-button>取消</el-button>
     </el-form-item>
     </el-form>
+    -->
   </div>
 </template>
 
@@ -89,40 +91,9 @@ export default {
   border: 1px solid rgb(231, 226, 226);
   padding: 20px
 }
-.userprofile {
-  height: 150px
-}
-.mainframe {
-  max-width: 800px;
-  margin: auto;
-}
 .modifyprofile {
   max-width: 500px;
   margin: auto;
-}
-.dataitem {
-  padding: 15px;
-  border-radius: 1px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid rgb(231, 226, 226);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  margin-bottom: 20px;
-}
-.notice {
-  padding: 15px;
-  border-radius: 1px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid rgb(231, 226, 226);
-  margin-bottom: 20px;
-}
-.avatarimage {
-  float: left;
-  padding: 0px;
-  height: 100%;
-  width: auto;
-  margin: auto
 }
 .contain {
   min-height: 450px;

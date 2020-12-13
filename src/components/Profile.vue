@@ -26,20 +26,37 @@
       <el-tab-pane label="我的发布">
         <div v-for="data in datalist" :key="data.title">
           <div class="dataitem">
-              <el-button style="float: right; padding: 3px 0" type="text">删除</el-button>
               <span>{{data.title}}</span>
+              <div>
+              <el-tag v-for="tag in data.tags" :key="tag" style="margin:10px 5px 0 0">
+                {{tag}}
+              </el-tag>
+              </div>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="deleteData(data)">删除</el-button>
+              <div class="timedisplay">
+              {{data.time}}
+              </div>
           </div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="我的收藏">
         <div v-for="data in favorlist" :key="data.title">
           <div class="dataitem">
-              <el-button style="float: right; padding: 3px 0" type="text">删除</el-button>
               <span>{{data.title}}</span>
+              <div>
+              <el-tag v-for="tag in data.tags" :key="tag" style="margin:10px 5px 0 0">
+                {{tag}}
+              </el-tag>
+              </div>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="deleteFavor(data)">取消收藏</el-button>
+              <div class="timedisplay">
+              {{data.time}}
+              </div>
           </div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="我的消息">
+        <el-button style="right:0; padding: 3px 0 10px 0" type="text"  @click="clearNotice">清空所有消息</el-button>
         <div v-for="notice in noticelist" :key="notice.title">
           <div class="notice">
               <span>{{notice.title}}</span>
@@ -58,8 +75,7 @@
           <el-input></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">确认修改</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" @click="modifyPassword">确认修改</el-button>
         </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -77,8 +93,13 @@ export default {
       gender: 'undefined',
       studentid: '1234567890',
       datalist: [
-        { title: '标题1' },
-        { title: '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长标题2' }
+        { title: '标题1',
+          time: '2020-12-12 01:23'
+        },
+        { title: '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长标题2',
+          tags: ['标签1', '2'],
+          time: '2020-12-12 01:23'
+        }
       ],
       favorlist: [
         { title: '标题3' },
@@ -91,9 +112,56 @@ export default {
     }
   },
   methods: {
-    deleteData () {
+    deleteData (data) {
+      this.$confirm('是否确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var index = this.datalist.indexOf(data);
+        this.datalist.splice(index, 1);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+      });
+    },
+    deleteFavor (data) {
+      this.$confirm('是否取消收藏?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var index = this.favorlist.indexOf(data);
+        this.favorlist.splice(index, 1);
+        this.$message({
+          type: 'success',
+          message: '取消收藏成功!'
+        });
+      }).catch(() => {
+      });
+    },
+    clearNotice () {
+      this.$confirm('是否清空消息通知?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.noticelist.splice(0);
+        this.$message({
+          type: 'success',
+          message: '清空成功!'
+        });
+      }).catch(() => {
+      });
+    },
+    modifyPassword () {
+      this.$message({
+        type: 'success',
+        message: '修改成功！'
+      });
     }
-
   }
 }
 </script>
@@ -114,12 +182,8 @@ export default {
   max-width: 800px;
   margin: auto;
 }
-.modifyprofile {
-  max-width: 500px;
-  margin: auto;
-}
 .dataitem {
-  padding: 15px;
+  padding: 15px 10px 5px 10px;
   border-radius: 1px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid rgb(231, 226, 226);
@@ -143,29 +207,14 @@ export default {
   margin: auto
 }
 .contain {
-  min-height: 450px;
+  min-height: 440px;
 }
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+.timedisplay {
+  color: grey;
+  margin-top: 10px;
+  font-size: 12px
 }
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
+.el-input {
+  width: 300px
 }
 </style>
