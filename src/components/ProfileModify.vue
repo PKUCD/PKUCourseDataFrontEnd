@@ -46,14 +46,14 @@ export default {
     });
   },
   methods: {
-    modifyProfile () {
+    modifyProfile () {/* 测试用
       this.$message({
         type: 'success',
         message: '修改成功!'
       });
       this.$router.push({
         path: '/profile'
-      });
+      });*/
       axios.post('/profile/edit', {
         newUserName: username,
         newAvatarUrl: avatarUrl

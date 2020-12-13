@@ -233,15 +233,16 @@ export default {
     },
     modifyPassword () {
         this.$refs.mPass.validate((valid) => {
-          if (valid) {/* 测试用
+          if (valid) {/*
               this.$message({
                 type: 'success',
                 message: '修改成功！'
-              });
-              this.$router.go(0);*/
+              });*/
+            var oldPass = this.$md5(this.mPass.oldpass),
+                newPass = this.$md5(this.mPass.newpass);
             axios.post('/profile/edit', {
-              oldpass: this.mPass.oldpass,
-              newpass: this.mPass.newpass
+              oldpass: oldPass,
+              newpass: newPass
             }).then(function (res) {
               this.$message({
                 type: 'success',
@@ -268,7 +269,7 @@ export default {
   mounted () {
     this.userid = this.getQueryString("uid");
 //    alert(this.userid);
-/*
+/* 测试用
     var res = {
       userName: 'username',
       studentID: '-11',
