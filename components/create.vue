@@ -3,11 +3,11 @@
   <el-header><div class="text" style="text-align:center;"><h2>发布页面</h2></div></el-header>
   <el-main><div class="text" style="text-align:center;">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="资料标题" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="资料标题" prop="title">
+    <el-input v-model="ruleForm.title"></el-input>
   </el-form-item>
-  <el-form-item label="资料内容" prop="desc">
-    <el-input type="textarea" :autosize="{ minRows:20}"  v-model="ruleForm.desc"></el-input>
+  <el-form-item label="资料内容" prop="text">
+    <el-input type="textarea" :autosize="{ minRows:20}"  v-model="ruleForm.text"></el-input>
   </el-form-item>
   <el-form-item label="资料标签">
       <div class="text" style="text-align:left;">
@@ -33,7 +33,7 @@
 </div>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+    <el-button type="primary" @click="POST();submitForm('ruleForm')">立即发布</el-button>
     <el-button @click="resetForm('ruleForm')">取消</el-button>
   </el-form-item>
 </el-form>
@@ -47,21 +47,20 @@ export default {
     data() {
       return {
         ruleForm: {
-          name: '',
-          resource: '',
-          desc: ''
+          title: '',
+          text: ''
           
         },
         rules: {
-          name: [
+          title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
             { min: 0, max: 50, message: '长度50个字符以内', trigger: 'blur' }
           ],
-          desc: [
+          text: [
             { required: true, message: '请填写活动形式', trigger: 'blur' }
           ]
         },
-        dynamicTags: ['标签一', '标签二', '标签三'],
+        dynamicTags: [],
         inputVisible: false,
         inputValue: ''
       };
@@ -98,6 +97,15 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      POST(){
+        const url="http:/data/new";
+        this.$ajax.get(url,{
+          params:{
+            title:this.ruleForm.title,
+            text:this.ruleForm.text,
+            tagList:this.dynamicTags
+        }})//params可以把参数写进去
       }
     }
   }
