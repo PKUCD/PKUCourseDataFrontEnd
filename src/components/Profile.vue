@@ -2,7 +2,7 @@
   <div class="mainframe" id="ProfilePage">
     <el-row class="userprofile default">
       <el-avatar :size="110" :src="avatarUrl" style="float: left"></el-avatar>
-      <router-link to="/profile/edit"><el-button style="float: right">编辑资料</el-button></router-link>
+      <router-link to="/profile/edit" v-if="isOwner"><el-button style="float: right">编辑资料</el-button></router-link>
       <div style="float: left; padding: 15px 20px"> {{username}} </div>
     </el-row>
     <el-row class="default contain">
