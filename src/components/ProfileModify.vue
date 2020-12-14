@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted () {
-    axios.get('/profile/edit', {
+    this.$axios.get('/profile/edit', {
       params: {
       }
     })
@@ -54,7 +54,7 @@ export default {
       this.$router.push({
         path: '/profile'
       });*/
-      axios.post('/profile/edit', {
+      this.$axios.post('/profile/edit', {
         newUserName: username,
         newAvatarUrl: avatarUrl
       }).then(function (res) {

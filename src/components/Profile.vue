@@ -18,7 +18,7 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="我的发布">
-          <div v-for="data in datalist" :key="data">
+          <div v-for="data in datalist" :key="data.postid">
             <div class="dataitem">
               <el-link :href="data.Url" :underline="false" class="datatitle">
                 {{data.title}}
@@ -36,7 +36,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="我的收藏">
-          <div v-for="data in favorlist" :key="data">
+          <div v-for="data in favorlist" :key="data.postid">
             <div class="dataitem">
               <el-link :href="data.Url" :underline="false" class="datatitle">
                 {{data.title}}
@@ -73,7 +73,7 @@
       <el-row v-else>
         <div style="margin-bottom: 20px"> TA的发布</div>
         <div v-if="datalist.length > 0">
-          <div v-for="data in datalist" :key="data">
+          <div v-for="data in datalist" :key="data.postid">
             <div class="dataitem">
               <el-link :href="data.Url" :underline="false" class="datatitle">
                 {{data.title}}
@@ -176,14 +176,14 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => { /*测试用
+      }).then(() => { /* //测试用
           var index = this.datalist.indexOf(data);
           this.datalist.splice(index, 1);
           this.$message({
             type: 'success',
             message: '删除成功!'
           });*/
-        axios.delete('/data/read', {
+        this.$axios.delete('/data/read', {
           params: {
             dataid: data.id
           }
@@ -206,14 +206,14 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {/* 测试用
+      }).then(() => {/* //测试用
         var index = this.favorlist.indexOf(data);
         this.favorlist.splice(index, 1);
         this.$message({
           type: 'success',
           message: '取消收藏成功!'
         });*/
-        axios.delete('/data/read/favor', {
+        this.$axios.delete('/data/read/favor', {
           params: {
             dataid: data.id
           }
@@ -233,14 +233,14 @@ export default {
     },
     modifyPassword () {
         this.$refs.mPass.validate((valid) => {
-          if (valid) {/*
+          if (valid) {/* // 测试用
               this.$message({
                 type: 'success',
                 message: '修改成功！'
               });*/
             var oldPass = this.$md5(this.mPass.oldpass),
                 newPass = this.$md5(this.mPass.newpass);
-            axios.post('/profile/edit', {
+            this.$axios.post('/profile/edit', {
               oldpass: oldPass,
               newpass: newPass
             }).then(function (res) {
@@ -269,7 +269,7 @@ export default {
   mounted () {
     this.userid = this.getQueryString("uid");
 //    alert(this.userid);
-/* 测试用
+/* //测试用
     var res = {
       userName: 'username',
       studentID: '-11',
@@ -279,12 +279,14 @@ export default {
         { title: '标题1',
           time: '2020-12-12 01:23',
           publisher: 'xxx',
-          Url: ''
+          Url: '',
+          postid: 1
         },
         { title: '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长标题2',
           tags: ['标签1', '2'],
           time: '2020-12-12 01:23',
-          publisher: 'yyy'
+          publisher: 'yyy',
+          postid: 2
         }
       ],
       favorlist: [
@@ -299,7 +301,8 @@ export default {
     this.favorlist = res.favorlist;
     this.isOwner = res.studentID !== "-1";
     */
-    axios.get('/profile', {
+    
+    this.$axios.get('/profile', {
       params: {
         uid: this.userid
       }
