@@ -42,11 +42,11 @@ export default {
       this.username = res.userName;
       this.avatarUrl = res.avatarUrl;
     }).catch(function (error) {
-      document.getElementById("ProfilePage").innerHTML = "404";
+      document.getElementById("ProfileModifyPage").innerHTML = "404";
     });
   },
   methods: {
-    modifyProfile () {/* 测试用
+    modifyProfile () {/* //测试用
       this.$message({
         type: 'success',
         message: '修改成功!'
