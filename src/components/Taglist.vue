@@ -82,13 +82,30 @@
 export default {
   name: 'taglist',
   data() {
-      const item = {
-        tagname1: '信息科学技术学院'
+     item = {
+        tagname: '',
+        tagdetails:'',
       };
       return {
         tableData: Array(10).fill(item)
       }
-    }
+    },
+  mounted() {
+            url = '/TagList';
+            axios.get(url).then(
+                response => {
+                    result = response.data;
+                    console.log(result)
+                    this.tagname = resuslt.tagname;
+                    this.tagdetails=result.tagdetails;
+                }
+            ).catch(
+                response => {
+                    alert('请求失败');
+                },
+            );
+     }
+
 }
 </script>
 <style>

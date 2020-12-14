@@ -1,6 +1,9 @@
 <template>
     
 <div>
+   <!--<div v-if="!repositoryUrl">loading...</div>-->
+   <div>
+      
 <el-container style="height: 500px; border: 1px solid #eee">
   <el-container>
     <el-header style="text-align: right; font-size: 12px">
@@ -44,28 +47,46 @@
         <el-table-column prop="intro" label="简介" width="700">
         </el-table-column>
         <el-table-column prop="Details" label="详细情况" width="70">
-              <el-link type="primary">details</el-link>
+              <el-link type="primary"><a :href="repositoryUrl">Details</a></el-link>
         </el-table-column>
       </el-table>
     </el-main>
   </el-container>
 </el-container>
 </div>
+</div>
 </template>>
 
 <script>
+import axios from 'axios';
   export default {
     data() {
-      const item = {
-        date: '11.11 18:00',
-        contributer: 'Nano',
-        tag: 'Null',
-        intro: 'blank'
-      };
       return {
-        tableData: Array(20).fill(item)
+        date: '',
+        contributer: '',
+        tag: '',
+        intro: '',
+         repositoryUrl : '',
+         tableData: Array(10).fill(item)
       }
-    }
+    },
+    mounted() {
+            const url = '/Result?keyword="key"';
+            axios.get(url).then(
+                response => {
+                    const result = response.data;
+                    console.log(result)
+                    this.date = result.date;
+                    this.contributer= result.contributer;
+                    this.tag=result.tag;
+                    this.intro=result.intro;
+                }
+            ).catch(
+                response => {
+                    alert('请求失败');
+                },
+            );
+     }
   };
 </script>
 
