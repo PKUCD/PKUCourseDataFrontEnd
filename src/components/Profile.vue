@@ -18,121 +18,33 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="我的发布">
-          <div v-for="data in datalist" :key="data.postid">
-            <div class="dataitem">
-              <el-link :href="data.Url" :underline="false" class="datatitle">
-                {{data.title}}
-              </el-link>
-                <div>
-                <el-tag v-for="tag in data.tags" :key="tag" style="margin:10px 5px 0 0">
-                  {{tag}}
-                </el-tag>
-                </div>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="deleteData(data)">删除</el-button>
-                <span class="timedisplay">
-                  {{data.publisher}} 发布于 {{data.time}}
-                </span>
-            </div>
-          </div>
+          <showList :mylist="datalist" :text="datatext" :isOwner="true"></showList>
         </el-tab-pane>
         <el-tab-pane label="我的收藏">
-          <div v-for="data in favorlist" :key="data.postid">
-            <div class="dataitem">
-              <el-link :href="data.Url" :underline="false" class="datatitle">
-                {{data.title}}
-              </el-link>
-                <div>
-                <el-tag v-for="tag in data.tags" :key="tag" style="margin:10px 5px 0 0">
-                  {{tag}}
-                </el-tag>
-                </div>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="deleteFavor(data)">取消收藏</el-button>
-                <span class="timedisplay">
-                  {{data.publisher}} 发布于 {{data.time}}
-                </span>
-            </div>
-          </div>
+          <showList :mylist="favorlist" :text="favortext" :isOwner="true"></showList>
         </el-tab-pane>
         <el-tab-pane label="密码修改">
-          <el-form :model="mPass" :rules="rules" ref="mPass" label-width="120px" class="demo-ruleForm">
-            <el-form-item label="请输入原密码" prop="oldpass">
-              <el-input type="password" v-model="mPass.oldpass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="请输入新密码" prop="newpass">
-              <el-input type="password" v-model="mPass.newpass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认新密码" prop="confirmpass">
-              <el-input type="password" v-model="mPass.confirmpass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="modifyPassword">确认修改</el-button>
-            </el-form-item>
-          </el-form>
+          <ModifyPass :mPass="mPass"></ModifyPass>
         </el-tab-pane>
       </el-tabs>
       <el-row v-else>
         <div style="margin-bottom: 20px"> TA的发布</div>
-        <div v-if="datalist.length > 0">
-          <div v-for="data in datalist" :key="data.postid">
-            <div class="dataitem">
-              <el-link :href="data.Url" :underline="false" class="datatitle">
-                {{data.title}}
-              </el-link>
-                <div>
-                <el-tag v-for="tag in data.tags" :key="tag" style="margin:10px 5px 0 0">
-                  {{tag}}
-                </el-tag>
-                </div>
-                <div class="timedisplay">
-                  {{data.publisher}} 发布于 {{data.time}}
-                </div>
-            </div>
-          </div>
-        </div>
-        <div v-else class="isEmpty">
-          这里空空如也
-        </div>
+        <showList :mylist="datalist" :text="datatext" :isOwner="false"></showList>
       </el-row>
     </el-row>
   </div>
 </template>
 
 <script>
+import showList from './showList'
+import ModifyPass from './ModifyPass'
 export default {
   name: 'Profile',
+  components: {
+    showList,
+    ModifyPass
+  },
   data () {
-    var validatePass0 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入新密码'));
-        } else if (value.length < 6 || value.length > 15){
-          callback(new Error('密码长度在6到15个字符'));
-        } else {
-          callback();
-        }
-    };
-    var validatePass1 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入新密码'));
-        } else if (value.length < 6 || value.length > 15){
-          callback(new Error('密码长度在6到15个字符'));
-        } else {
-          if (this.mPass.confirmpass !== '') {
-            this.$refs.mPass.validateField('confirmpass');
-          }
-          callback();
-        }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入新密码'));
-      } else if (value.length < 6 || value.length > 15){
-        callback(new Error('密码长度在6到15个字符'));
-      } else if (value !== this.mPass.newpass) {
-      callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
-    };
     return {
       userid: '',
       username: '',
@@ -140,29 +52,24 @@ export default {
       avatarUrl: '',
       isOwner: true,
       datalist: [],
+      datatext: {
+        name: '删除',
+        confirm: '是否确认删除？',
+        success: '删除成功！',
+        axiosUrl: '/data/read'
+      },
       favorlist: [],
+      favortext: {
+        name: '取消收藏',
+        confirm: '是否取消收藏？',
+        success: '取消成功！',
+        axiosUrl: '/data/read/favor'
+      },
       mPass: {
         oldpass: '',
         newpass: '',
         confirmpass: ''
       },
-      rules: {
-        oldpass: [
-//          {required: true, message: '请输入原密码', trigger: 'blur'},
-//          {min: 6, max: 15, message: '密码长度在6到15个字符', trigger:'blur'}
-          { validator: validatePass0, trigger: 'blur' }
-        ],
-        newpass: [
-//          {required: true, message: '请输入新密码', trigger: 'blur'},
-//          {min: 6, max: 15, message: '密码长度在6到15个字符', trigger:'blur'},
-          { validator: validatePass1, trigger: 'blur' }
-        ],
-        confirmpass: [
-//         {required: true, message: '请再次输入新密码', trigger: 'blur'},
-//          {min: 6, max: 15, message: '密码长度在6到15个字符', trigger:'blur'},
-          { validator: validatePass2, trigger: 'blur' }
-        ]
-      }
     }
   },
   methods: {
@@ -171,97 +78,6 @@ export default {
       var r = window.location.search.substr(1).match(reg);
       if (r != null) return unescape(r[2]); return null;
     },
-    deleteData (data) {
-      this.$confirm('是否确认删除?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => { /* //测试用
-          var index = this.datalist.indexOf(data);
-          this.datalist.splice(index, 1);
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });*/
-        this.$axios.delete('/data/read', {
-          params: {
-            dataid: data.id
-          }
-        }).then(res => {
-          var index = this.datalist.indexOf(data);
-          this.datalist.splice(index, 1);
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          this.$router.go(0);
-        }).catch(function (error) {
-          document.getElementById("ProfilePage").innerHTML = "404";
-        });
-      }).catch(() => {
-      });
-    },
-    deleteFavor (data) {
-      this.$confirm('是否取消收藏?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {/* //测试用
-        var index = this.favorlist.indexOf(data);
-        this.favorlist.splice(index, 1);
-        this.$message({
-          type: 'success',
-          message: '取消收藏成功!'
-        });*/
-        this.$axios.delete('/data/read/favor', {
-          params: {
-            dataid: data.id
-          }
-        }).then(res => {
-          var index = this.favorlist.indexOf(data);
-          this.favorlist.splice(index, 1);
-          this.$message({
-            type: 'success',
-            message: '取消收藏成功!'
-          });
-          this.$router.go(0);
-        }).catch(function (error) {
-          document.getElementById("ProfilePage").innerHTML = "404";
-        });
-      }).catch(() => {
-      });
-    },
-    modifyPassword () {
-        this.$refs.mPass.validate((valid) => {
-          if (valid) {/* // 测试用
-              this.$message({
-                type: 'success',
-                message: '修改成功！'
-              });*/
-            var oldPass = this.$md5(this.mPass.oldpass),
-                newPass = this.$md5(this.mPass.newpass);
-            this.$axios.post('/profile/edit', {
-              oldpass: oldPass,
-              newpass: newPass
-            }).then(function (res) {
-              this.$message({
-                type: 'success',
-                message: '修改成功！'
-              });
-              this.$router.go(0);
-              //
-            }).catch(function (error) {
-              this.$message({
-                type: 'failed',
-                message: '修改失败！原密码输入错误！'
-              });
-            });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-    }
   },
   created () {
     
@@ -334,25 +150,8 @@ export default {
   height: 150px
 }
 .mainframe {
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
-}
-.dataitem {
-  padding: 10px 10px 5px 10px;
-  border-radius: 1px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid rgb(231, 226, 226);
-  margin-bottom: 20px;
-}
-.datatitle {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  font-size: 20px;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
 }
 .notice {
   padding: 15px;
@@ -369,20 +168,6 @@ export default {
   margin: auto
 }
 .contain {
-  min-height: 440px;
-}
-.timedisplay {
-  color: grey;
-  margin-top: 10px;
-  font-size: 12px
-}
-.el-input {
-  width: 300px
-}
-.isEmpty {
-  text-align: center;
-  font-size: 40px;
-  color: rgb(231, 226, 226);
-  line-height: 350px
+  min-height: 540px;
 }
 </style>

@@ -12,6 +12,8 @@
 
 最后，希望您没有启用ESlint。
 
+更新：把`Profile.vue`中的`showList`和`ModifyPass`分离了出来。
+
 ## Build Setup
 
 ``` bash

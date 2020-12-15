@@ -54,9 +54,10 @@ export default {
       this.$router.push({
         path: '/profile'
       });*/
+      
       this.$axios.post('/profile/edit', {
-        newUserName: username,
-        newAvatarUrl: avatarUrl
+        newUserName: this.username,
+        newAvatarUrl: this.avatarUrl
       }).then(function (res) {
         // 修改成功
         this.$message({
@@ -67,7 +68,7 @@ export default {
           path: '/profile'
         });
       }).catch(function (error) {
-        document.getElementById("ProfileModifyPage").innerHTML = "404";
+        console.log('error');
       });
     },
     handleAvatarSuccess (res, file) {
@@ -103,9 +104,6 @@ export default {
 .modifyprofile {
   max-width: 500px;
   margin: auto;
-}
-.contain {
-  min-height: 450px;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
