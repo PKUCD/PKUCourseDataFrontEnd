@@ -1,13 +1,13 @@
 <template>
-    <el-form :model="mPass" :rules="rules" ref="mPass" label-width="120px" class="demo-ruleForm">
-      <el-form-item label="请输入原密码" prop="oldpass">
-        <el-input type="password" v-model="mPass.oldpass" autocomplete="off"></el-input>
+    <el-form :model="Password" :rules="rules" ref="Password" label-width="120px" class="demo-ruleForm">
+      <el-form-item label="请输入原密码" prop="old">
+        <el-input type="password" v-model="Password.old" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="请输入新密码" prop="newpass">
-        <el-input type="password" v-model="mPass.newpass" autocomplete="off"></el-input>
+      <el-form-item label="请输入新密码" prop="new">
+        <el-input type="password" v-model="Password.new" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="确认新密码" prop="confirmpass">
-        <el-input type="password" v-model="mPass.confirmpass" autocomplete="off"></el-input>
+      <el-form-item label="确认新密码" prop="confirm">
+        <el-input type="password" v-model="Password.confirm" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="modifyPassword">确认修改</el-button>
@@ -18,7 +18,6 @@
 <script>
 export default {
   name: 'ModifyPass',
-  props: ['mPass'],
   data () {
     var validatePass0 = (rule, value, callback) => {
       if (value === '') {
@@ -35,8 +34,8 @@ export default {
       } else if (value.length < 6 || value.length > 15){
         callback(new Error('密码长度在6到15个字符'));
       } else {
-        if (this.mPass.confirmpass !== '') {
-          this.$refs.mPass.validateField('confirmpass');
+        if (this.Password.confirm !== '') {
+          this.$refs.Password.validateField('confirm');
         }
         callback();
       }
@@ -46,21 +45,26 @@ export default {
         callback(new Error('请再次输入新密码'));
       } else if (value.length < 6 || value.length > 15){
         callback(new Error('密码长度在6到15个字符'));
-      } else if (value !== this.mPass.newpass) {
+      } else if (value !== this.Password.new) {
       callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
       }
     };
     return {
+      Password: {
+        old: '',
+        new: '',
+        confirm: ''
+      },
       rules: {
-        oldpass: [
+        old: [
           { validator: validatePass0, trigger: 'blur' }
         ],
-        newpass: [
+        new: [
           { validator: validatePass1, trigger: 'blur' }
         ],
-        confirmpass: [
+        confirm: [
           { validator: validatePass2, trigger: 'blur' }
         ]
       }
@@ -69,14 +73,14 @@ export default {
   methods: {
     modifyPassword () {
       var that = this;
-      this.$refs.mPass.validate((valid) => {
+      this.$refs.Password.validate((valid) => {
         if (valid) {/* // 测试用
           this.$message({
             type: 'success',
             message: '修改成功！'
           });*/
-          var oldPass = this.$md5(this.mPass.oldpass),
-              newPass = this.$md5(this.mPass.newpass);
+          var oldPass = this.$md5(this.Password.old),
+              newPass = this.$md5(this.Password.new);
           this.$axios.post('/profile/edit', {
             oldpass: oldPass,
             newpass: newPass

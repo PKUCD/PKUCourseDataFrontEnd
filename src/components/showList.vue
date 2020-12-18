@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'showList',
+  name: 'ShowList',
   props: ['mylist', 'text', 'isOwner'],
   data () {
     return {

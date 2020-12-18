@@ -1,14 +1,33 @@
 <template>
   <div class="mainframe" id="ProfilePage">
-    <el-row class="userprofile default">
-      <el-avatar :size="110" :src="avatarUrl" style="float: left"></el-avatar>
-      <router-link to="/profile/edit" v-if="isOwner"><el-button style="float: right">编辑资料</el-button></router-link>
-      <div style="float: left; padding: 15px 20px"> {{username}} </div>
-    </el-row>
-    <el-row class="default contain">
-      <el-tabs v-if="isOwner" tab-position="left">
+  <el-row :gutter="50">
+    <el-col :span="6" class="default">
+      <div style="width:100%;height:auto">
+      <img :src="avatarUrl" style="width:100%;height:auto">
+      </div>
+      <div style="text-align: center">
+      <div style="padding: 15px 20px"> {{username}} </div>
+      <el-button v-if="isOwner" @click="ModifyProfileVisible = true">编辑资料</el-button>
+      </div>
+      <ModifyProfile
+        :visible.sync="ModifyProfileVisible"
+        @close="ModifyProfileVisible = false"
+        @modifyName="modifyName"
+        @modifyAvatar="modifyAvatar">
+      </ModifyProfile>
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap; text-align: center; margin: 20px">
+        <div style="width:50%">
+          <div>{{datalist.length}}</div><div>已发布</div>
+        </div>
+        <div style="width:50%">
+          <div>{{favorlist.length}}</div><div>已收藏</div>
+        </div>
+      </div>
+    </el-col>
+    <el-col :span="18">
+      <el-tabs v-if="isOwner" type="border-card" class="contain">
         <el-tab-pane label="个人资料">
-          <el-form ref="form" label-width="80px" style="width: 300px">
+          <el-form label-width="80px" style="width: 300px">
           <el-form-item label="用户名">
             <span> {{username}} </span>
           </el-form-item>
@@ -18,34 +37,39 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="我的发布">
-          <showList :mylist="datalist" :text="datatext" :isOwner="true"></showList>
+          <ShowList :mylist="datalist" :text="datatext" :isOwner="true"></ShowList>
         </el-tab-pane>
         <el-tab-pane label="我的收藏">
-          <showList :mylist="favorlist" :text="favortext" :isOwner="true"></showList>
+          <ShowList :mylist="favorlist" :text="favortext" :isOwner="true"></ShowList>
         </el-tab-pane>
         <el-tab-pane label="密码修改">
-          <ModifyPass :mPass="mPass"></ModifyPass>
+          <ModifyPass></ModifyPass>
         </el-tab-pane>
       </el-tabs>
-      <el-row v-else>
-        <div style="margin-bottom: 20px"> TA的发布</div>
-        <showList :mylist="datalist" :text="datatext" :isOwner="false"></showList>
-      </el-row>
-    </el-row>
+      <el-tabs v-else type="border-card" class="contain">
+        <el-tab-pane label="TA的发布">
+          <ShowList :mylist="datalist" :text="datatext" :isOwner="false"></ShowList>
+        </el-tab-pane>
+      </el-tabs>
+    </el-col>
+  </el-row>
   </div>
 </template>
 
 <script>
-import showList from './showList'
+import ShowList from './ShowList'
 import ModifyPass from './ModifyPass'
+import ModifyProfile from './ModifyProfile'
 export default {
   name: 'Profile',
   components: {
-    showList,
-    ModifyPass
+    ShowList,
+    ModifyPass,
+    ModifyProfile
   },
   data () {
     return {
+      ModifyProfileVisible: false,
       userid: '',
       username: '',
       studentid: '',
@@ -65,30 +89,26 @@ export default {
         success: '取消成功！',
         axiosUrl: '/data/read/favor'
       },
-      mPass: {
-        oldpass: '',
-        newpass: '',
-        confirmpass: ''
-      },
     }
   },
   methods: {
-    getQueryString(name) {
-      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      var r = window.location.search.substr(1).match(reg);
-      if (r != null) return unescape(r[2]); return null;
+    modifyName (newName) {
+      this.username = newName;
     },
+    modifyAvatar (newAvatar) {
+      this.avatarUrl = newAvatar;
+    }
   },
   created () {
     
   },
   mounted () {
-    this.userid = this.getQueryString("uid");
+    this.userid = this.$route.query.uid;
 //    alert(this.userid);
 /* //测试用
     var res = {
       userName: 'username',
-      studentID: '-11',
+      studentID: '-1',
       avatarUrl: '',
       isOwner: true,
       datalist: [
@@ -116,6 +136,7 @@ export default {
     this.datalist = res.datalist;
     this.favorlist = res.favorlist;
     this.isOwner = res.studentID !== "-1";
+    if (!this.avatarUrl) this.avatarUrl = require('@/assets/defaultAvatar.png');
     */
     
     this.$axios.get('/profile', {
@@ -130,6 +151,7 @@ export default {
       this.datalist = res.datalist;
       this.favorlist = res.favorlist;
       this.isOwner = res.studentID !== "-1";
+      if (!this.avatarUrl) this.avatarUrl = require('@/assets/defaultAvatar.png');
     }).catch(function (error) {
       document.getElementById("ProfilePage").innerHTML = "404";
     });
@@ -137,20 +159,14 @@ export default {
 }
 </script>
 <style scoped>
-.el-row {
-  margin-bottom: 20px;
-}
 .default {
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid rgb(231, 226, 226);
   padding: 20px
 }
-.userprofile {
-  height: 150px
-}
 .mainframe {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: auto;
 }
 .notice {
@@ -160,14 +176,13 @@ export default {
   border: 1px solid rgb(231, 226, 226);
   margin-bottom: 20px;
 }
-.avatarimage {
-  float: left;
+.avatar {
   padding: 0px;
-  height: 100%;
+  height: auto;
   width: auto;
   margin: auto
 }
 .contain {
-  min-height: 540px;
+  min-height: 600px;
 }
 </style>
