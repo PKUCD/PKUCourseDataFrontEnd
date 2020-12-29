@@ -11,7 +11,7 @@
           </el-tag>
           </div>
           <el-button v-if="isOwner" style="float: right; padding: 3px 0" type="text" @click="deleteData(data)">{{text.name}}</el-button>
-          <span class="timedisplay">
+          <span v-if="data.time" class="timedisplay">
             {{data.publisher}} 发布于 {{data.time}}
           </span>
       </div>

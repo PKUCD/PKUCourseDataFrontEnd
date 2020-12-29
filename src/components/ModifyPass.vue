@@ -1,13 +1,13 @@
 <template>
     <el-form :model="Password" :rules="rules" ref="Password" label-width="120px" class="demo-ruleForm">
       <el-form-item label="请输入原密码" prop="old">
-        <el-input type="password" v-model="Password.old" autocomplete="off"></el-input>
+        <el-input type="password" v-model="Password.old" autocomplete="off" clearable></el-input>
       </el-form-item>
       <el-form-item label="请输入新密码" prop="new">
-        <el-input type="password" v-model="Password.new" autocomplete="off"></el-input>
+        <el-input type="password" v-model="Password.new" autocomplete="off" clearable></el-input>
       </el-form-item>
       <el-form-item label="确认新密码" prop="confirm">
-        <el-input type="password" v-model="Password.confirm" autocomplete="off"></el-input>
+        <el-input type="password" v-model="Password.confirm" autocomplete="off" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="modifyPassword">确认修改</el-button>
@@ -23,7 +23,7 @@ export default {
       if (value === '') {
           callback(new Error('请输入原密码'));
       } else if (value.length < 6 || value.length > 15){
-          callback(new Error('密码长度在6到15个字符'));
+          callback(new Error('密码长度在6到15个字符之间'));
       } else {
           callback();
       }
@@ -32,7 +32,7 @@ export default {
       if (value === '') {
         callback(new Error('请输入新密码'));
       } else if (value.length < 6 || value.length > 15){
-        callback(new Error('密码长度在6到15个字符'));
+        callback(new Error('密码长度在6到15个字符之间'));
       } else {
         if (this.Password.confirm !== '') {
           this.$refs.Password.validateField('confirm');
@@ -44,7 +44,7 @@ export default {
       if (value === '') {
         callback(new Error('请再次输入新密码'));
       } else if (value.length < 6 || value.length > 15){
-        callback(new Error('密码长度在6到15个字符'));
+        callback(new Error('密码长度在6到15个字符之间'));
       } else if (value !== this.Password.new) {
       callback(new Error('两次输入密码不一致!'));
       } else {

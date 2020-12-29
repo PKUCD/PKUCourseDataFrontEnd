@@ -1,8 +1,8 @@
 <template>
   <el-dialog title="账号信息" :visible="visible" :before-close="closeDialog">
-    <el-form :model="profile" :rules="rules" ref="profile" label-width="80px">
+    <el-form :model="profile" :rules="rules" ref="profile" label-width="80px" hide-required-asterisk>
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="profile.username" autocomplete="off"></el-input>
+        <el-input v-model="profile.username" autocomplete="off" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="modifyUserName">提交</el-button>
@@ -51,13 +51,14 @@ export default {
   methods: {
     modifyUserName () {
       this.$refs.profile.validateField('username',(error) => {
-        if (!error) {/* //测试用
+        if (!error) { //测试用
           this.$message({
             type: 'success',
             message: '修改成功!'
           });
           this.$emit('modifyName', this.profile.username);
-          */
+          
+          /*
           this.$axios.post('/profile/edit', {
             newUserName: this.profile.username,
           }).then(function (res) {
@@ -69,7 +70,7 @@ export default {
           this.$emit('modifyName', this.profile.userName);
           }).catch(function (error) {
             console.log('error');
-          });
+          });*/
         }
         else{
           console.log('username error')
@@ -77,14 +78,15 @@ export default {
       })
     },
     modifyAvatar () {
+//      this.$refs.avatarUpload.submit();
       this.$refs.profile.validateField('avatarUrl',(error) => {
-        if (!error) {/* //测试用
+        if (!error) { //测试用
           this.$message({
             type: 'success',
             message: '修改成功!'
           });
           this.$emit('modifyAvatar', this.profile.avatarUrl);
-          */
+          /*
           this.$axios.post('/profile/edit', {
             newAvatarUrl: this.profile.avatarUrl
           }).then(function (res) {
@@ -96,7 +98,7 @@ export default {
           this.$emit('modifyAvatar', this.profile.avatarUrl);
           }).catch(function (error) {
             console.log('error');
-          });
+          });*/
         }
         else{
           console.log('avatar error')
@@ -104,11 +106,13 @@ export default {
       })
     },
     closeDialog () {
+      this.profile.username = '';
+      this.profile.avatarUrl = '';
       this.$emit('close');
     },
     handleAvatarSuccess (res, file) {
       this.profile.avatarUrl = URL.createObjectURL(file.raw);
-//      alert(this.profile.avatarUrl); 主要是想看看搞出来的路径是什么东西
+      alert(this.profile.avatarUrl); // 主要是想看看搞出来的路径是什么东西
     },
     beforeAvatarUpload (file) {
       const isJPG = file.type === 'image/jpeg'
@@ -120,7 +124,13 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
-    }
+    },/*
+    uploadHttpRequest (file) {
+      let url = '/files';
+      this.$axios.post(url, file).then( res => {
+        console.log(response.data);
+      })
+    }*/
   }
 }
 </script>

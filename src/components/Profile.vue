@@ -1,20 +1,18 @@
 <template>
   <div class="mainframe" id="ProfilePage">
-  <el-row :gutter="50">
-    <el-col :span="6" class="default">
-      <div style="width:100%;height:auto">
-      <img :src="avatarUrl" style="width:100%;height:auto">
+  <el-row class="default">
+      <div style="margin:0 auto; float:left">
+        <el-avatar shape="square" :size="100" :src="avatarUrl"></el-avatar>
       </div>
-      <div style="text-align: center">
-      <div style="padding: 15px 20px"> {{username}} </div>
-      <el-button v-if="isOwner" @click="ModifyProfileVisible = true">编辑资料</el-button>
-      </div>
+      <div style="padding: 0px 20px; float:left"> {{username}} </div>
+      <el-button v-if="isOwner" style="float: right" @click="ModifyProfileVisible = true">编辑资料</el-button>
       <ModifyProfile
         :visible.sync="ModifyProfileVisible"
         @close="ModifyProfileVisible = false"
         @modifyName="modifyName"
         @modifyAvatar="modifyAvatar">
       </ModifyProfile>
+      <!--
       <div style="display: flex; flex-direction: row; flex-wrap: wrap; text-align: center; margin: 20px">
         <div style="width:50%">
           <div>{{datalist.length}}</div><div>已发布</div>
@@ -23,8 +21,9 @@
           <div>{{favorlist.length}}</div><div>已收藏</div>
         </div>
       </div>
-    </el-col>
-    <el-col :span="18">
+      -->
+  </el-row>
+  <el-row>
       <el-tabs v-if="isOwner" type="border-card" class="contain">
         <el-tab-pane label="个人资料">
           <el-form label-width="80px" style="width: 300px">
@@ -51,7 +50,6 @@
           <ShowList :mylist="datalist" :text="datatext" :isOwner="false"></ShowList>
         </el-tab-pane>
       </el-tabs>
-    </el-col>
   </el-row>
   </div>
 </template>
@@ -105,10 +103,10 @@ export default {
   mounted () {
     this.userid = this.$route.query.uid;
 //    alert(this.userid);
-/* //测试用
+ //测试用
     var res = {
       userName: 'username',
-      studentID: '-1',
+      studentID: '-11',
       avatarUrl: '',
       isOwner: true,
       datalist: [
@@ -136,9 +134,9 @@ export default {
     this.datalist = res.datalist;
     this.favorlist = res.favorlist;
     this.isOwner = res.studentID !== "-1";
-    if (!this.avatarUrl) this.avatarUrl = require('@/assets/defaultAvatar.png');
-    */
+    if (!this.avatarUrl) this.avatarUrl = '/static/defaultAvatar.png';
     
+    /*
     this.$axios.get('/profile', {
       params: {
         uid: this.userid
@@ -154,7 +152,7 @@ export default {
       if (!this.avatarUrl) this.avatarUrl = require('@/assets/defaultAvatar.png');
     }).catch(function (error) {
       document.getElementById("ProfilePage").innerHTML = "404";
-    });
+    });*/
   }
 }
 </script>
@@ -163,7 +161,8 @@ export default {
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid rgb(231, 226, 226);
-  padding: 20px
+  padding: 20px;
+  margin-bottom: 30px
 }
 .mainframe {
   max-width: 1200px;
