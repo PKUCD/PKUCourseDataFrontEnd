@@ -1,13 +1,11 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div id="app">
+        APP 根组件
+    </div>
 </template>
-<script>
-export default {
-  name: 'App'
-}
 
+<script>
 </script>
+
 <style>
 </style>
