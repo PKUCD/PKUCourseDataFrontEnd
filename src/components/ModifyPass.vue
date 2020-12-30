@@ -79,22 +79,28 @@ export default {
             type: 'success',
             message: '修改成功！'
           });*/
-          var oldPass = this.$md5(this.Password.old),
-              newPass = this.$md5(this.Password.new);
-          this.$axios.post('/profile/edit', {
+          var oldPass = that.$md5(this.Password.old),
+              newPass = that.$md5(this.Password.new);
+          that.$axios.post('/profile/edit', {
             oldpass: oldPass,
             newpass: newPass
           }).then(function (res) {
-            that.$message({
-            type: 'success',
-            message: '修改成功！'
-            });
-            that.$router.go(0);
+            console.log(res);
+            if (res.data.code == 200) {
+              that.$message({
+              type: 'success',
+              message: '修改成功！'
+              });
+
+//            that.$router.go(0);
+            }
+            else {
+              that.$message({
+              type: 'failes',
+              message: '修改失败！密码输入错误！'
+              });
+            }
           }).catch(function (error) {
-            that.$message({
-            type: 'failed',
-            message: '修改失败！原密码输入错误！'
-            });
           });
         } else {
           console.log('error submit!!');

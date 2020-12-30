@@ -52,25 +52,24 @@ export default {
     modifyUserName () {
       this.$refs.profile.validateField('username',(error) => {
         if (!error) { //测试用
-          this.$message({
-            type: 'success',
-            message: '修改成功!'
-          });
-          this.$emit('modifyName', this.profile.username);
-          
-          /*
           this.$axios.post('/profile/edit', {
             newUserName: this.profile.username,
           }).then(function (res) {
+            console.log(res);
             // 修改成功
-            this.$message({
-              type: 'success',
-              message: '修改成功!'
-            });
-          this.$emit('modifyName', this.profile.userName);
+            if (res.data.code == 200){
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.$emit('modifyName', this.profile.userName);
+            }
+            else{
+              console.log(res);
+            }
           }).catch(function (error) {
             console.log('error');
-          });*/
+          });
         }
         else{
           console.log('username error')
@@ -81,24 +80,22 @@ export default {
 //      this.$refs.avatarUpload.submit();
       this.$refs.profile.validateField('avatarUrl',(error) => {
         if (!error) { //测试用
-          this.$message({
-            type: 'success',
-            message: '修改成功!'
-          });
-          this.$emit('modifyAvatar', this.profile.avatarUrl);
-          /*
           this.$axios.post('/profile/edit', {
             newAvatarUrl: this.profile.avatarUrl
           }).then(function (res) {
+            console.log(res);
             // 修改成功
-            this.$message({
-              type: 'success',
-              message: '修改成功!'
-            });
-          this.$emit('modifyAvatar', this.profile.avatarUrl);
+            if (res.data.code == 200){
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+              this.$emit('modifyAvatar', this.profile.avatarUrl);
+            }
+            else console.log(res);
           }).catch(function (error) {
             console.log('error');
-          });*/
+          });
         }
         else{
           console.log('avatar error')

@@ -1,6 +1,6 @@
 <template>
   <div class="mainframe" id="ProfilePage">
-  <el-row class="default">
+    <el-row class="default">
       <div style="margin:0 auto; float:left">
         <el-avatar shape="square" :size="100" :src="avatarUrl"></el-avatar>
       </div>
@@ -22,8 +22,8 @@
         </div>
       </div>
       -->
-  </el-row>
-  <el-row>
+    </el-row>
+    <el-row>
       <el-tabs v-if="isOwner" type="border-card" class="contain">
         <el-tab-pane label="个人资料">
           <el-form label-width="80px" style="width: 300px">
@@ -50,7 +50,7 @@
           <ShowList :mylist="datalist" :text="datatext" :isOwner="false"></ShowList>
         </el-tab-pane>
       </el-tabs>
-  </el-row>
+    </el-row>
   </div>
 </template>
 
@@ -78,14 +78,14 @@ export default {
         name: '删除',
         confirm: '是否确认删除？',
         success: '删除成功！',
-        axiosUrl: '/data/read'
+        axiosUrl: '/post'
       },
       favorlist: [],
       favortext: {
         name: '取消收藏',
         confirm: '是否取消收藏？',
         success: '取消成功！',
-        axiosUrl: '/data/read/favor'
+        axiosUrl: '/post/favor'
       },
     }
   },
@@ -103,56 +103,24 @@ export default {
   mounted () {
     this.userid = this.$route.query.uid;
 //    alert(this.userid);
- //测试用
-    var res = {
-      userName: 'username',
-      studentID: '-11',
-      avatarUrl: '',
-      isOwner: true,
-      datalist: [
-        { title: '标题1',
-          time: '2020-12-12 01:23',
-          publisher: 'xxx',
-          Url: '',
-          postid: 1
-        },
-        { title: '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长标题2',
-          tags: ['标签1', '2'],
-          time: '2020-12-12 01:23',
-          publisher: 'yyy',
-          postid: 2
-        }
-      ],
-      favorlist: [
-        { title: '标题3' },
-        { title: '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长标题4' }
-      ],
-    }
-    this.username = res.userName;
-    this.studentid = res.studentID;
-    this.avatarUrl = res.avatarUrl;
-    this.datalist = res.datalist;
-    this.favorlist = res.favorlist;
-    this.isOwner = res.studentID !== "-1";
-    if (!this.avatarUrl) this.avatarUrl = '/static/defaultAvatar.png';
-    
-    /*
-    this.$axios.get('/profile', {
+
+    this.$axios.get('/post/show', {
       params: {
-        uid: this.userid
+        userID: this.userid
       }
     })
     .then(res => {
-      this.username = res.userName;
-      this.studentid = res.studentID;
-      this.avatarUrl = res.avatarUrl;
-      this.datalist = res.datalist;
-      this.favorlist = res.favorlist;
-      this.isOwner = res.studentID !== "-1";
-      if (!this.avatarUrl) this.avatarUrl = require('@/assets/defaultAvatar.png');
+      console.log(res);
+      this.username = res.data.user.username;
+      this.studentid = res.data.user.pku_mail;
+      this.avatarUrl = res.data.user.avatar;
+      this.datalist = res.data.post_list;
+      this.favorlist = res.data.favor_list;
+      this.isOwner = res.data.isOwner;
+      if (!this.avatarUrl) this.avatarUrl = '/static/defaultAvatar.png';
     }).catch(function (error) {
       document.getElementById("ProfilePage").innerHTML = "404";
-    });*/
+    });
   }
 }
 </script>
@@ -167,6 +135,7 @@ export default {
 .mainframe {
   max-width: 1200px;
   margin: auto;
+  font-size: 25px
 }
 .notice {
   padding: 15px;

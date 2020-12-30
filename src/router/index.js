@@ -3,9 +3,14 @@ import Router from 'vue-router'
 import Profile from '@/components/Profile'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import Home from '@/components/Home'
 
 Vue.use(Router)
 const routes = [
+  {
+    path: '/',
+    redirect: '/login',
+  },
   {
     path: '/profile',
     name: 'Profile',
@@ -20,7 +25,12 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
-  }
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home
+  },
 ]
 
 const router = new Router({

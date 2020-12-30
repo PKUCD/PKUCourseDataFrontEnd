@@ -2,7 +2,7 @@ import axios from 'axios';
 import router from './router';
 
 // axios 配置
-
+/*
 // http request 拦截器
 axios.interceptors.request.use(
     config => {
@@ -28,5 +28,5 @@ axios.interceptors.response.use(
     error => {
         return Promise.reject(error);
     }
-);
+);*/
 export default axios;

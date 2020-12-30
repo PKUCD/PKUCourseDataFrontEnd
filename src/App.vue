@@ -11,4 +11,10 @@ export default {
 </script>
 
 <style>
+body {
+  background: #eeeeee
+}
+.default {
+  background: #ffffff
+}
 </style>

@@ -52,15 +52,21 @@ export default {
         if (valid) {
           let pass = that.$md5(that.profile.password);
           that.$axios.post('/login', {
-            studentID: that.profile.studentID,
-            passwordHash: pass
+            email: that.profile.studentID,
+            password: pass
           }).then(function (res) {
-            that.$message({
-              type: 'success',
-              message: '登录成功！'
-            });
-            window.localStorage["token"] = res.data.token;
+            console.log(res);
+            if (res.data.code === 200) {
+
+//              window.localStorage["token"] = res.data.token;
+              console.log(res.data.data.profile.user.userID);
+              that.$router.push({path: '/profile', query: {uid: res.data.data.profile.user.userID}});
+            }
+            else {
+              alert('失败');
+            }
           }).catch(function (error) {
+            console.log(error);
             that.$message({
               type: 'failed',
               message: '登录失败'

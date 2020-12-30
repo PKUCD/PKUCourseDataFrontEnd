@@ -69,7 +69,7 @@ export default {
     sendValiCode() {
         let that = this;
         that.isDisabled = true;
-        that.$axios.post('/user/register/validationCode', {
+        that.$axios.post('/register/validationCode', {
           email: that.profile.studentID,
         }).then(function (res) {
           that.buttonName = '（' + that.time + '秒）后重新发送';
@@ -99,6 +99,7 @@ export default {
             passwordHash: pass,
             verificationCode: that.profile.valiCode,
           }).then(function (res) {
+            console.log(res);
             that.$message({
               type: 'success',
               message: '注册成功！'
