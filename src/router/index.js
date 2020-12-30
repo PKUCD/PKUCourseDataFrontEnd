@@ -10,7 +10,7 @@ const routes = [
     path:'/',
     redirect:'/change',
     redirect:'/create',
-    redirect:'/browse'
+    redirect:'/browse',
   },
   {
     path:'/browse',

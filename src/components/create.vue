@@ -33,7 +33,7 @@
 </div>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="POST;submitForm('ruleForm')">立即发布</el-button>
+    <el-button type="primary" @click="POST();submitForm('ruleForm')">立即发布</el-button>
     <el-button @click="resetForm('ruleForm')">取消</el-button>
   </el-form-item>
 </el-form>
@@ -60,7 +60,7 @@ export default {
             { required: true, message: '请填写活动形式', trigger: 'blur' }
           ]
         },
-        dynamicTags: ['标签一', '标签二', '标签三'],
+        dynamicTags: [],
         inputVisible: false,
         inputValue: ''
       };
@@ -104,8 +104,9 @@ export default {
           params:{
             title:this.ruleForm.title,
             text:this.ruleForm.text,
-            tagList:this.dynamicTags
-        }})
+            tagList:this.dynamicTags,
+            time:new data()
+        }})//params可以把参数写进去
       }
     }
   }
