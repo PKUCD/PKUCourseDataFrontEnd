@@ -2,18 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import router from './router/index'
+import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import axios from './axios'
-import md5 from "js-md5"
-Vue.prototype.$axios = axios
-Vue.prototype.$md5 = md5
-
+import VueResource from 'vue-resource'
 Vue.config.productionTip = false
-Vue.use(ElementUI);
 
 /* eslint-disable no-new */
+Vue.use(ElementUI)
 new Vue({
   el: '#app',
   router,

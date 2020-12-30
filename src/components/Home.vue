@@ -11,16 +11,18 @@
     <el-row justify="space-around" type="flex" :gutter="2">
       <el-menu-item index="5" >
         <el-col :span="100">
-          <el-input v-model="input" placeholder="搜索你想要的资料">
+          <el-input 
+    placeholder="搜索你想要的资料"
+    v-model="searchVal">>
           </el-input>
       </el-col>
       </el-menu-item>
       <el-menu-item index="6" >
        <el-col :span="2">
           <div class="grid-content bg-purple">
-            <router-link to="Result">
-              <el-button>search</el-button>
-           </router-link>
+            <router-link to ="Result">
+              <el-button @click= "showresult" class="nextpage">搜索</el-button>
+            </router-link>
          </div>
        </el-col>
       </el-menu-item>
@@ -38,13 +40,51 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'home',
   data(){
     return{
+      postid:'',
+      searchVal:'', 
+      userid:'',
+      username:'',
+      time:'',
+      favorCnt: '',
+    }
+  },
+  methods:{
+    showresult(){
+      this.$axios({
+        methods:get,
+        url: "posts/search/",
+          params:{
+            keywords: searchVal,
+          },
+      })
+      .then(res => {
+        this.time=res.posts.post_info.time;
+        this.userid=res.posts.post_info.publisher.userID;
+        this.username=res.posts.post_info.publisher.username;
+        this.favorCnt=res.posts.post_info.favor.favorCnt;
+        this.postid=res.posts.post_info.postID;
+      }).catch(function (error) {
+        });
+      this.$router.push({
+        path:"/Result",
+        query: {
+          postid:this.postid,
+          userid:this.userid,
+          username:this.username,
+          time:this.time,
+          favorCnt: this.favorCnt,
+        }
+      });
     }
   }
+
 }
+
 </script>
 
 <style>
