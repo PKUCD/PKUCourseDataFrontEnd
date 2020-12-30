@@ -33,12 +33,13 @@
 </el-menu>
       
     </el-header>
-    
     <el-main>
       <el-table :data="tableData">
-        <el-table-column prop="date" label="日期" width="140">
+        <el-table-column prop="time" label="日期" width="140">
         </el-table-column>
-        <el-table-column prop="contributer" label="发布者" width="120">
+        <el-table-column prop="user" label="发布者" width="120">
+        </el-table-column>
+        <el-table-column prop="favorcnt" label="点赞数" width="120">
         </el-table-column>
         <el-table-column prop="tag" label="标签" width=200>
           <el-tag>标签一</el-tag>
@@ -46,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="intro" label="简介" width="700">
         </el-table-column>
-        <el-table-column prop="Details" label="详细情况" width="70">
+        <el-table-column prop="Details" label="详细情况" width="120">
               <el-link type="primary"><a :href="repositoryUrl">Details</a></el-link>
         </el-table-column>
       </el-table>
@@ -62,31 +63,24 @@ import axios from 'axios';
   export default {
     data() {
       return {
-        date: '',
-        contributer: '',
-        tag: '',
+        time: '',
+        user: '',
+        favorcnt: '',
         intro: '',
          repositoryUrl : '',
-         tableData: Array(10).fill(item)
       }
     },
-    mounted() {
-            const url = '/Result?keyword="key"';
-            axios.get(url).then(
-                response => {
-                    const result = response.data;
-                    console.log(result)
-                    this.date = result.date;
-                    this.contributer= result.contributer;
-                    this.tag=result.tag;
-                    this.intro=result.intro;
-                }
-            ).catch(
-                response => {
-                    alert('请求失败');
-                },
-            );
-     }
+    created(){
+      var username = this.$route.query.username;
+      var qtime = this.$route.query.time;
+      var postid=this.$route.query.postid;
+      var favorCnt = this.$route.query.favorCnt;
+    },
+    mounted(){
+      this.time= qtime;
+      tthis.user= username;
+      this.favorcnt = favorCnt;
+    }
   };
 </script>
 
