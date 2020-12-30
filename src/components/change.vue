@@ -27,7 +27,7 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm');PUT">立即修改</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm');POST">立即修改</el-button>
             <el-button @click="resetForm('ruleForm')">取消</el-button>
           </el-form-item>
         </el-form>
@@ -103,7 +103,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      PUT() {
+      POST() {
         const url = "http:/data/edit?dataid=X";
         this.$ajax.get(url, {
           params: {

@@ -34,13 +34,14 @@
   {{tag}}
 </el-tag>
       <el-card class="box-card" style="text-align:left;" v-for="comment in commentList" v-bind:key="comment">
-        {{comment}}
+        <div class="text" style="text-align:left;font-size:6px">{{comment.text}}</div>
+        <div class="text" style="text-align:right;font-size:6px">评论者:{{comment.user}} 评论时间：{{comment.time}}</div>
       </el-card>
     </el-main>
     <el-footer>
       <el-card class="box-card">
 
-        <el-input type="textarea" style="width:1350px;" v-model="comment"></el-input>
+        <el-input type="textarea" style="width:1350px;" v-model="comment.text"></el-input>
 
         <el-button type="primary" style="margin-left: 20px;margin-top: 5px;" icon="el-icon-position" @click="POST">
         </el-button>
@@ -60,7 +61,11 @@
         likecount: '',
         commentList:[],
         favorcount: '',
-        comment: '',
+        comment:{
+          text:'',
+          time:'',
+          user:'',
+        },
         Time:'',
       };
     },
@@ -69,7 +74,9 @@
         const url = "http:/data/read/comment?dataid=X";
         this.$ajax.get(url, {
           params: {
-            text: this.comment
+            text: this.comment.text,
+            time: this.comment.time,
+            user: this.comment.user,
           }
         })
       },//评论资料
@@ -80,7 +87,7 @@
         const url = "http:/data/read?dataid=X";
         this.$ajax.get(url).then(
           response => {
-            result = response.data;
+            result = response.post;
             console.log(result);
             this.titile = resuslt.title;
             this.text = result.text;
