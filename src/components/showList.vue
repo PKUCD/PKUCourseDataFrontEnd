@@ -47,8 +47,8 @@ export default {
             message: this.text.success
           });*/
         
-        that.$axios.delete(that.text.axiosUrl, {
-          data: {
+        that.$axios.get(that.text.axiosUrl, {
+          params: {
             dataid: data.id
           }
         }).then(res => {
@@ -67,7 +67,6 @@ export default {
           }
 //          this.$router.go(0);
         }).catch(function (error) {
-//          document.getElementById("ProfilePage").innerHTML = "404";
         });
       }).catch(() => {
       });

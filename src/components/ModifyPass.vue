@@ -81,7 +81,7 @@ export default {
           });*/
           var oldPass = that.$md5(this.Password.old),
               newPass = that.$md5(this.Password.new);
-          that.$axios.post('/profile/edit', {
+          that.$axios.post('/user/profile/edit', {
             oldpass: oldPass,
             newpass: newPass
           }).then(function (res) {

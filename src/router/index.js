@@ -4,7 +4,16 @@ import Profile from '@/components/Profile'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Home from '@/components/Home'
-
+import Result from '@/components/Result'
+import change from '@/components/change'
+import create from '@/components/create'
+import browse from '@/components/browse'
+import Taglist from '@/components/Taglist'
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 Vue.use(Router)
 const routes = [
   {
@@ -27,9 +36,29 @@ const routes = [
     component: Register
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home
+    path: '/result',
+    name: 'Result',
+    component: Result
+  },
+  {
+    path: '/change',
+    name: 'change',
+    component: change
+  },
+  {
+    path: '/create',
+    name: 'create',
+    component: create
+  },
+  {
+    path: '/browse',
+    name: 'browse',
+    component: browse
+  },
+  {
+    path: '/Taglist',
+    name: 'Taglist',
+    component: Taglist
   },
 ]
 

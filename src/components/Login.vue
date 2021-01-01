@@ -51,7 +51,7 @@ export default {
       that.$refs.profile.validate((valid) => {
         if (valid) {
           let pass = that.$md5(that.profile.password);
-          that.$axios.post('/login', {
+          that.$axios.post('/user/login', {
             email: that.profile.studentID,
             password: pass
           }).then(function (res) {
@@ -60,10 +60,14 @@ export default {
 
 //              window.localStorage["token"] = res.data.token;
               console.log(res.data.data.profile.user.userID);
+//              that.$router.push({path: '/Taglist'});
               that.$router.push({path: '/profile', query: {uid: res.data.data.profile.user.userID}});
             }
             else {
-              alert('失败');
+              that.$message({
+                type: 'failed',
+                message: '登录失败！学号或密码错误！'
+              });
             }
           }).catch(function (error) {
             console.log(error);

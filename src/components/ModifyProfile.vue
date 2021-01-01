@@ -50,19 +50,21 @@ export default {
   },
   methods: {
     modifyUserName () {
+      let that = this;
       this.$refs.profile.validateField('username',(error) => {
         if (!error) { //测试用
-          this.$axios.post('/profile/edit', {
+          this.$axios.post('/user/profile/edit', {
             newUserName: this.profile.username,
           }).then(function (res) {
             console.log(res);
             // 修改成功
             if (res.data.code == 200){
-              this.$message({
+              that.$message({
                 type: 'success',
                 message: '修改成功!'
               });
-              this.$emit('modifyName', this.profile.userName);
+              that.$emit('modifyName', this.profile.userName);
+//              that.$router.go(0);
             }
             else{
               console.log(res);
@@ -80,7 +82,7 @@ export default {
 //      this.$refs.avatarUpload.submit();
       this.$refs.profile.validateField('avatarUrl',(error) => {
         if (!error) { //测试用
-          this.$axios.post('/profile/edit', {
+          this.$axios.post('/user/profile/edit', {
             newAvatarUrl: this.profile.avatarUrl
           }).then(function (res) {
             console.log(res);
@@ -109,7 +111,7 @@ export default {
     },
     handleAvatarSuccess (res, file) {
       this.profile.avatarUrl = URL.createObjectURL(file.raw);
-      alert(this.profile.avatarUrl); // 主要是想看看搞出来的路径是什么东西
+//      alert(this.profile.avatarUrl); // 主要是想看看搞出来的路径是什么东西
     },
     beforeAvatarUpload (file) {
       const isJPG = file.type === 'image/jpeg'

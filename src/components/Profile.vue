@@ -30,7 +30,7 @@
           <el-form-item label="用户名">
             <span> {{username}} </span>
           </el-form-item>
-          <el-form-item label="学号">
+          <el-form-item label="邮箱">
             <span> {{studentid}} </span>
           </el-form-item>
           </el-form>
@@ -69,7 +69,7 @@ export default {
     return {
       ModifyProfileVisible: false,
       userid: '',
-      username: '',
+      username: '???',
       studentid: '',
       avatarUrl: '',
       isOwner: true,
@@ -78,14 +78,14 @@ export default {
         name: '删除',
         confirm: '是否确认删除？',
         success: '删除成功！',
-        axiosUrl: '/post'
+        axiosUrl: '/post/delete'
       },
       favorlist: [],
       favortext: {
         name: '取消收藏',
         confirm: '是否取消收藏？',
         success: '取消成功！',
-        axiosUrl: '/post/favor'
+        axiosUrl: '/post/favor/delete'
       },
     }
   },
@@ -97,29 +97,33 @@ export default {
       this.avatarUrl = newAvatar;
     }
   },
+  watch: {
+    '$route' (to, from) {
+      this.$router.go(0);
+    }
+  },
   created () {
     
   },
   mounted () {
-    this.userid = this.$route.query.uid;
-//    alert(this.userid);
-
-    this.$axios.get('/post/show', {
+    let that = this;
+    that.userid = that.$route.query.uid;
+//    alert(that.userid);
+    that.$axios.get('/post/show', {
       params: {
-        userID: this.userid
+        userID: that.userid
       }
     })
     .then(res => {
       console.log(res);
-      this.username = res.data.user.username;
-      this.studentid = res.data.user.pku_mail;
-      this.avatarUrl = res.data.user.avatar;
-      this.datalist = res.data.post_list;
-      this.favorlist = res.data.favor_list;
-      this.isOwner = res.data.isOwner;
-      if (!this.avatarUrl) this.avatarUrl = '/static/defaultAvatar.png';
+      that.username = res.data.user.username;
+      that.studentid = res.data.user.pku_mail;
+      that.avatarUrl = res.data.user.avatar;
+      that.datalist = res.data.post_list;
+      that.favorlist = res.data.favor_list;
+      that.isOwner = res.data.isOwner;
+      if (!that.avatarUrl) that.avatarUrl = '/static/defaultAvatar.png';
     }).catch(function (error) {
-      document.getElementById("ProfilePage").innerHTML = "404";
     });
   }
 }
