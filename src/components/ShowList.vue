@@ -10,10 +10,11 @@
             {{tag}}
           </el-tag>
           </div>
-          <el-button v-if="isOwner" style="float: right; padding: 3px 0" type="text" @click="deleteData(data)">{{text.name}}</el-button>
+          <el-button v-if="isOwner" style="float: right; clear: both; padding: 3px 0" type="text" @click="deleteData(data)">{{text.name}}</el-button>
           <span v-if="data.time" class="timedisplay">
             {{data.publisher}} 发布于 {{data.time}}
           </span>
+          <div style="clear: both"></div>
       </div>
     </div>
   </div>
@@ -32,8 +33,9 @@ export default {
   },
   methods: {
     deleteData (data) {
-      if (!this.isOwner) console.log('error');
-      this.$confirm(this.text.confirm, '提示', {
+      let that = this;
+      if (!that.isOwner) console.log('error');
+      that.$confirm(that.text.confirm, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -45,20 +47,26 @@ export default {
             message: this.text.success
           });*/
         
-        this.$axios.delete(this.text.axiosUrl, {
+        that.$axios.get(that.text.axiosUrl, {
           params: {
             dataid: data.id
           }
         }).then(res => {
-          var index = this.mylist.indexOf(data);
-          this.mylist.splice(index, 1);
-          this.$message({
-            type: 'success',
-            message: this.text.success
-          });
+          console.log(res);
+          if (res.data.code == 200){
+            var index = that.mylist.indexOf(data);
+            that.mylist.splice(index, 1);
+            that.$message({
+              type: 'success',
+              message: that.text.success
+            });
+
+          }
+          else {
+            console.log('error');
+          }
 //          this.$router.go(0);
         }).catch(function (error) {
-          document.getElementById("ProfilePage").innerHTML = "404";
         });
       }).catch(() => {
       });
