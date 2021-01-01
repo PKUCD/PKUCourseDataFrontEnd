@@ -97,11 +97,6 @@ export default {
       this.avatarUrl = newAvatar;
     }
   },
-  watch: {
-    '$route' (to, from) {
-      this.$router.go(0);
-    }
-  },
   created () {
     
   },

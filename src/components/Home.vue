@@ -24,7 +24,7 @@
        </el-col>
       </el-menu-item>
     </el-row>
-    <el-submenu index="4">
+    <el-submenu index="4" :disabled="userid">
       <template slot="title">当前用户：{{username}}</template>
       <el-menu-item index="4-1" @click="toUserProfile">个人空间</el-menu-item>
       <el-menu-item index="4-2" @click="toLogout">退出登录</el-menu-item>
@@ -46,21 +46,34 @@ export default {
     }
   },
   mounted () {
-    let that = this;
-    that.$axios.get('/user/profile')
-    .then(res => {
-      console.log(res);
-      if (res.data.code == 200) {
-        that.userid = res.data.data.profile.user.userID;
-        that.username = res.data.data.profile.user.name;
-      }
-      else {
-        that.$router.push('/');
-      }
-    }).catch(function (error) {
-    });
+//    this.checkLogin();
+  },
+  watch: {
+    '$route':{
+      handler(to, from) {
+        if (to !== '/' && to !== '/login' && to !== '/register') {
+          this.checkLogin();
+        }
+      },
+      immediate: true
+    } 
   },
   methods: {
+    checkLogin () {
+      let that = this;
+      that.$axios.get('/user/profile')
+      .then(res => {
+        console.log(res);
+        if (res.data.code == 200) {
+          that.userid = res.data.data.profile.user.userID;
+          that.username = res.data.data.profile.user.name;
+        }
+        else if (that.$route.path !== '/register'){
+          that.$router.push('/');
+        }
+      }).catch(function (error) {
+      });
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },

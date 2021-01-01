@@ -45,6 +45,7 @@ export default {
         username: "",
         password: "",
         valiCode: "",
+        lastSended: "",
       },
       isDisabled: false,
       buttonName: '发送验证码',
@@ -65,52 +66,104 @@ export default {
       },
     }
   },
+  watch: {
+  },
   methods: {
     sendValiCode() {
-        let that = this;
-        that.isDisabled = true;
-        that.$axios.post('/user/register/validationCode', {
-          email: that.profile.studentID,
-        }).then(function (res) {
-          that.buttonName = '（' + that.time + '秒）后重新发送';
-          console.log(res);
-        }).catch(function (error) {
-          console.log(error);
-        });
-        let interval = window.setInterval(function() {
-            -- that.time;
-            that.buttonName = '（' + that.time + '秒）后重新发送';
-            if (that.time <= 0) {
-                that.buttonName = '重新发送';
-                that.time = 60;
-                that.isDisabled = false;
-                window.clearInterval(interval);
+      let that = this;
+      that.$refs.profile.validateField('studentID',(error) => {
+        if (!error) {
+          that.$axios.post('/user/register/validationCode', {
+            email: that.profile.studentID,
+          }).then(function (res) {
+            console.log(res);
+            if (res.data.code == 200) {
+              that.profile.lastSended = that.profile.studentID;
+              that.isDisabled = true;
+              that.buttonName = '（' + that.time + '秒）后重新发送';
+              let interval = window.setInterval(function() {
+                  -- that.time;
+                  that.buttonName = '（' + that.time + '秒）后重新发送';
+                  if (that.time <= 0) {
+                      that.buttonName = '重新发送';
+                      that.time = 60;
+                      that.isDisabled = false;
+                      window.clearInterval(interval);
+                  }
+              }, 1000);
+            } else if (res.data.code == 300) {
+              that.profile.studentID = "";
+              that.$message({
+                type: 'failed',
+                message: '该邮箱已注册！'
+              });
+            } else if (res.data.code == 700) {
+              that.profile.studentID = "";
+              that.$message({
+                type: 'failed',
+                message: '邮箱错误！'
+              });
+            } else{
+              that.profile.studentID = "";
             }
-        }, 1000);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        }
+        else{
+          console.log('email error')
+        }
+      })
     },
     submitForm(profile) {
       let that = this;
       that.$refs[profile].validate((valid) => {
         if (valid) {
-          let pass = that.$md5(that.profile.password);
-          that.$axios.post('/user/register', {
-            email: that.profile.studentID,
-            userName: that.profile.username,
-            passwordHash: pass,
-            verificationCode: that.profile.valiCode,
-          }).then(function (res) {
-            console.log(res);
-            that.$message({
-              type: 'success',
-              message: '注册成功！'
+          if (that.profile.studentID == that.profile.lastSended) {
+            let pass = that.$md5(that.profile.password);
+            that.$axios.post('/user/register', {
+              email: that.profile.studentID,
+              userName: that.profile.username,
+              passwordHash: pass,
+              verificationCode: that.profile.valiCode,
+            }).then(function (res) {
+              console.log(res);
+              if (res.data.code == 200) {
+                that.$message({
+                  type: 'success',
+                  message: '注册成功！'
+                });
+                that.$router.push('/login');
+              } else if (res.data.code == 300) {
+                that.profile.studentID = "";
+                that.$message({
+                  type: 'failed',
+                  message: '该邮箱已注册！'
+                });
+              } else if (res.data.code == 700) {
+                that.profile.studentID = "";
+                that.$message({
+                  type: 'failed',
+                  message: '验证码错误！'
+                });
+              } else{
+                that.$message({
+                  type: 'failed',
+                  message: '注册失败！'
+                });
+              }
+            }).catch(function (error) {
+              that.$message({
+                type: 'failed',
+                message: '注册失败'
+              });
             });
-            that.$router.push('/login');
-          }).catch(function (error) {
+          } else {
             that.$message({
               type: 'failed',
-              message: '注册失败'
+              message: '请先发送验证码'
             });
-          });
+          }
         } else {
           console.log('error submit!!');
           return false;
