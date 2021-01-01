@@ -155,7 +155,7 @@ export default {
             }).catch(function (error) {
               that.$message({
                 type: 'failed',
-                message: '注册失败'
+                message: '注册失败!已有同名用户!'
               });
             });
           } else {

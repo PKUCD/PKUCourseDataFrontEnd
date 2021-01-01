@@ -51,10 +51,10 @@ export default {
   methods: {
     modifyUserName () {
       let that = this;
-      this.$refs.profile.validateField('username',(error) => {
-        if (!error) { //测试用
-          this.$axios.post('/user/profile/edit', {
-            newUserName: this.profile.username,
+      that.$refs.profile.validateField('username',(error) => {
+        if (!error) {
+          that.$axios.post('/user/profile/edit', {
+            newUserName: that.profile.username,
           }).then(function (res) {
             console.log(res);
             // 修改成功
@@ -63,7 +63,7 @@ export default {
                 type: 'success',
                 message: '修改成功!'
               });
-              that.$emit('modifyName', this.profile.userName);
+              that.$emit('modifyName', that.profile.username);
 //              that.$router.go(0);
             }
             else{
@@ -71,6 +71,10 @@ export default {
             }
           }).catch(function (error) {
             console.log('error');
+            that.$message({
+              type: 'failed',
+              message: '修改失败!已有同名用户!'
+            });
           });
         }
         else{
@@ -79,20 +83,20 @@ export default {
       })
     },
     modifyAvatar () {
-//      this.$refs.avatarUpload.submit();
-      this.$refs.profile.validateField('avatarUrl',(error) => {
+      let that = this;
+      that.$refs.profile.validateField('avatarUrl',(error) => {
         if (!error) { //测试用
-          this.$axios.post('/user/profile/edit', {
-            newAvatarUrl: this.profile.avatarUrl
+          that.$axios.post('/user/profile/edit', {
+            newAvatarUrl: that.profile.avatarUrl
           }).then(function (res) {
             console.log(res);
             // 修改成功
             if (res.data.code == 200){
-              this.$message({
+              that.$message({
                 type: 'success',
                 message: '修改成功!'
               });
-              this.$emit('modifyAvatar', this.profile.avatarUrl);
+              that.$emit('modifyAvatar', that.profile.avatarUrl);
             }
             else console.log(res);
           }).catch(function (error) {
@@ -107,7 +111,9 @@ export default {
     closeDialog () {
       this.profile.username = '';
       this.profile.avatarUrl = '';
+      this.$refs.profile.resetFields();
       this.$emit('close');
+      this.$router.go(0);
     },
     handleAvatarSuccess (res, file) {
       this.profile.avatarUrl = URL.createObjectURL(file.raw);

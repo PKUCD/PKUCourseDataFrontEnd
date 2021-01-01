@@ -24,7 +24,7 @@
        </el-col>
       </el-menu-item>
     </el-row>
-    <el-submenu index="4" :disabled="userid">
+    <el-submenu index="4" :disabled="!userid">
       <template slot="title">当前用户：{{username}}</template>
       <el-menu-item index="4-1" @click="toUserProfile">个人空间</el-menu-item>
       <el-menu-item index="4-2" @click="toLogout">退出登录</el-menu-item>

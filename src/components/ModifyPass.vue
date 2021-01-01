@@ -74,11 +74,7 @@ export default {
     modifyPassword () {
       var that = this;
       this.$refs.Password.validate((valid) => {
-        if (valid) {/* // 测试用
-          this.$message({
-            type: 'success',
-            message: '修改成功！'
-          });*/
+        if (valid) {
           var oldPass = that.$md5(this.Password.old),
               newPass = that.$md5(this.Password.new);
           that.$axios.post('/user/profile/edit', {
@@ -88,11 +84,10 @@ export default {
             console.log(res);
             if (res.data.code == 200) {
               that.$message({
-              type: 'success',
-              message: '修改成功！'
+                type: 'success',
+                message: '修改成功！'
               });
-
-//            that.$router.go(0);
+              that.$refs.Password.resetFields();
             }
             else {
               that.$message({
