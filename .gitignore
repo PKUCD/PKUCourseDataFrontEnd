@@ -10,12 +10,6 @@ selenium-debug.log
 test/
 /src/components/HelloWorld.vue
 /src/mock.js
-/src/components/Header/
-/src/components/browse.vue
-/src/components/create.vue
-/src/components/change.vue
-/src/components/Result.vue
-/src/components/Taglist.vue
 /src/getPath.js
 
 .babelrc
