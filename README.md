@@ -2,19 +2,14 @@
 
 > A Vue.js project
 
-## Profile & ProfileModify
+## 组件
+用户个人主页：Profile.vue，包括子组件：ShowList.vue, ModifyProfile.vue, ModifyPass.vue。
+登录注册：Login.vue和Register.vue。这原本不是我负责的部分，说起来有点尴尬，由于负责的同学push得太晚，所以我自己写了并且调试完成了。
+顶部菜单栏：Home.vue。最初的框架是吕孟韬同学写的（详见分支resultpage），不过我改了很多，包括样式、按钮逻辑、添加登录状态和各个请求以及跳转等。几乎算是全新的一个组件。
 
-主要的组件在`src/components`里，对应的路由在`src/router`的`index.js`。合并的时候应该只要下载这几个文件，把`index.js`的内容和本地的`router`合并一下。
+其他的browse.vue、create.vue、change.vue（李伟韬同学的分支，名字超长那个）、Result.vue、Taglist.vue（吕孟韬同学的分支resultpage）是直接从对应分支复制的，原本把这些组件ignore了，但是分支切换后数据丢失，导致路由跳转出错，所以又复制了回来，这五个组件不是我写的。
 
-如果合并的时候出了问题，务必检查一下axios请求的属性名是否一致（我是按照api文档写的，但是不排除有错漏。）
-
-没有交互的情况下把axios注释掉，原本注释的那些测试用的可以放出来。
-
-最后，希望您没有启用ESlint。
-
-更新：把`Profile.vue`中的`showList`和`ModifyPass`分离了出来。
-
-更新：把`ProfileModify.vue`改成了`Profile`里的对话框形式，调用子组件`ModifyProfile.vue`。
+另外还有nginx配置，这个没什么任务量（虽然搞了很久），所以没有push上来。
 
 ## Build Setup
 
