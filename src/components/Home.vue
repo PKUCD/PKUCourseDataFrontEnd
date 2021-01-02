@@ -39,10 +39,13 @@
 <script>
 import axios from 'axios';
 export default {
-<<<<<<< HEAD
   name: 'Home',
   data () {
     return {
+      postid:'',
+      searchVal:'', 
+      time:'',
+      favorCnt: '',
       activeIndex: '',
       input: '',
       userid: '',
@@ -95,19 +98,8 @@ export default {
           that.$router.go(0);
         }
       }).catch(function (error) {
-=======
-  name: 'home',
-  data(){
-    return{
-      postid:'',
-      searchVal:'', 
-      userid:'',
-      username:'',
-      time:'',
-      favorCnt: '',
-    }
-  },
-  methods:{
+      })
+    },
     showresult(){
       this.$axios({
         methods:get,
@@ -133,7 +125,6 @@ export default {
           time:this.time,
           favorCnt: this.favorCnt,
         }
->>>>>>> a1e09a4fac3e3924a65a6b73a177502bb4b36c36
       });
     }
   }
