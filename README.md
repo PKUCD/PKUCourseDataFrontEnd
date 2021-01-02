@@ -3,7 +3,7 @@
 > A Vue.js project
 
 ## 组件
-用户个人主页：Profile.vue，包括子组件：ShowList.vue, ModifyProfile.vue, ModifyPass.vue。修改头像相关没有实现。
+用户个人主页：Profile.vue，包括子组件：ShowList.vue, ModifyProfile.vue, ModifyPass.vue。修改头像相关没有实现（主要是头像上传部分有点疑问）。
 
 登录注册：Login.vue和Register.vue。这原本不是我负责的部分，说起来有点尴尬，由于负责的同学push得太晚，所以我自己写了并且调试完成了。
 
