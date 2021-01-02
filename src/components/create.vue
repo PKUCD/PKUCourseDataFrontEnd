@@ -33,7 +33,7 @@
 </div>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">立即发布</el-button>
+    <el-button type="primary" @click="POST();submitForm('ruleForm')">立即发布</el-button>
     <el-button @click="resetForm('ruleForm')">取消</el-button>
   </el-form-item>
 </el-form>
@@ -69,14 +69,12 @@ export default {
     handleClose(tag) {
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
-
       showInput() {
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
         });
       },
-
       handleInputConfirm() {
         let inputValue = this.inputValue;
         if (inputValue) {
@@ -86,10 +84,9 @@ export default {
         this.inputValue = '';
       },
       submitForm(formName) {
-        let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            that.$router.push({path: '/browse'});
+            alert('发布成功');
           } else {
             console.log('error submit!!');
             return false;
