@@ -2,7 +2,7 @@
   <div class="mainframe" id="ProfilePage">
     <el-row class="default">
       <div style="margin:0 auto; float:left">
-        <el-avatar shape="square" :size="100" :src="avatarUrl"></el-avatar>
+        <el-avatar shape="square" :size="100" :src="avatarUrl">{{username}}</el-avatar>
       </div>
       <div style="padding: 0px 20px; float:left"> {{username}} </div>
       <el-button v-if="isOwner" style="float: right" @click="ModifyProfileVisible = true">编辑资料</el-button>
