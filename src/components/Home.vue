@@ -1,13 +1,12 @@
 <template>
 <div>
-<el-container >
-  <el-container>
-    <el-header>
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+<el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect" 
+  background-color="#545c64"
+  text-color="#fff"
+  active-text-color="#ffd04b">
   <el-row justify="space-around" type="flex">
-    <el-menu-item index="1">首页</el-menu-item>
-      <router-link to="Taglist"><el-menu-item index="3" >标签列表</el-menu-item></router-link>
-    <el-menu-item index="4">个人空间</el-menu-item>
+    <router-link to="/Taglist"><el-menu-item index="3" >标签列表</el-menu-item></router-link>
+    <router-link to="/create"><el-menu-item index="8" >发布资料</el-menu-item></router-link>
     <el-row justify="space-around" type="flex" :gutter="2">
       <el-menu-item index="5" >
         <el-col :span="100">
@@ -25,23 +24,74 @@
        </el-col>
       </el-menu-item>
     </el-row>
+    <el-submenu index="4" :disabled="!userid">
+      <template slot="title">当前用户：{{username}}</template>
+      <el-menu-item index="4-1" @click="toUserProfile">个人空间</el-menu-item>
+      <el-menu-item index="4-2" @click="toLogout">退出登录</el-menu-item>
+    </el-submenu>
   </el-row>
 </el-menu>
-    </el-header>
-    <el-main>
-      
-    </el-main>
-  </el-container>
-</el-container> 
-
-  </div>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'home',
-  data(){
-    return{
+  name: 'Home',
+  data () {
+    return {
+      activeIndex: '',
+      input: '',
+      userid: '',
+      username: '未登录',
+    }
+  },
+  mounted () {
+//    this.checkLogin();
+  },
+  watch: {
+    '$route':{
+      handler(to, from) {
+        if (to !== '/' && to !== '/login' && to !== '/register') {
+          this.checkLogin();
+        }
+      },
+      immediate: true
+    } 
+  },
+  methods: {
+    checkLogin () {
+      let that = this;
+      that.$axios.get('/user/profile')
+      .then(res => {
+        console.log(res);
+        if (res.data.code == 200) {
+          that.userid = res.data.data.profile.user.userID;
+          that.username = res.data.data.profile.user.name;
+        }
+        else if (that.$route.path !== '/register'){
+          that.$router.push('/');
+        }
+      }).catch(function (error) {
+      });
+    },
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    toUserProfile() {
+      let that = this;
+//      console.log(that.userid);
+      that.$router.push({path: '/profile', query: {uid: this.userid}});
+    },
+    toLogout() {
+      let that = this;
+      that.$axios.post('/user/logout')
+      .then(res => {
+        console.log(res);
+        if (res.data.code == 200) {
+          that.$router.go(0);
+        }
+      }).catch(function (error) {
+      });
     }
   }
 }
