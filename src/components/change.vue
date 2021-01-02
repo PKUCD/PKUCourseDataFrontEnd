@@ -38,13 +38,11 @@
 
 <script>
   export default {
-
     data() {
       return {
         ruleForm: {
           name: '',
           desc: ''
-
         },
         rules: {
           name: [{
@@ -74,14 +72,12 @@
       handleClose(tag) {
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
-
       showInput() {
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
         });
       },
-
       handleInputConfirm() {
         let inputValue = this.inputValue;
         if (inputValue) {
@@ -134,7 +130,6 @@
       }//载入资料信息
     }
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -142,7 +137,6 @@
   .el-tag+.el-tag {
     margin-left: 10px;
   }
-
   .button-new-tag {
     margin-left: 10px;
     height: 32px;
@@ -150,24 +144,19 @@
     padding-top: 0;
     padding-bottom: 0;
   }
-
   .input-new-tag {
     width: 90px;
     margin-left: 10px;
     vertical-align: bottom;
   }
-
   .el-container {
     height: 700px;
     background-color: aliceblue;
   }
-
   .el-header {
     height: 100px;
   }
-
   .el-main {
     background-color: #FFFFFF;
   }
-
 </style>
