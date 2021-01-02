@@ -52,30 +52,58 @@
 
 <script>
   export default {
-
     data() {
       return {
-        title: '报告',
-        text: 'test',
-        publisher:'liufan',
+        title: '',
+        text: '',
+        publisher:'',
         likecount: '',
-        commentList:[
-        ],
+        commentList:[],
         favorcount: '',
         comment:{
           text:'',
           time:'',
           user:'',
         },
-        Time:'1608983748980',
+        Time:'',
       };
     },
     methods: {
+      POST() {
+        const url = "http:/data/read/comment?dataid=X";
+        this.$ajax.get(url, {
+          params: {
+            text: this.comment.text,
+            time: this.comment.time,
+            user: this.comment.user,
+          }
+        })
+      },//评论资料
       mounted() {
+        this.GET()
       },
+      GET() {
+        const url = "http:/data/read?dataid=X";
+        this.$ajax.get(url).then(
+          response => {
+            result = response.post;
+            console.log(result);
+            this.titile = resuslt.title;
+            this.text = result.text;
+            this.publisher = result.publisher;
+            this.likecount=result.likecount;
+            this.commentList=result.commentList;
+            this.favorcount=result.favorcount;
+            this.Time=result.time;
+          }
+        ).catch(
+          response => {
+            alert('请求失败');
+          },
+        );
+      }//载入资料信息
     }
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -84,24 +112,19 @@
     margin-top: 10px;
     margin-right: 40px;
   }
-
   .el-container {
     height: 600px;
     background-color: white;
   }
-
   .el-header {
     background-color: #FFFFFF;
   }
-
   .el-main {
     background-color: #FFFFFF;
   }
-
   .el-footer {
     background-color: #FFFFFF;
     color: #333;
     text-align: center;
   }
-
 </style>
