@@ -141,7 +141,6 @@ export default {
                   message: '该邮箱已注册！'
                 });
               } else if (res.data.code == 700) {
-                that.profile.studentID = "";
                 that.$message({
                   type: 'failed',
                   message: '验证码错误！'
